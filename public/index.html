@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>CMS - Express</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/flatly/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="./assets/css/burger_style.css" media="screen" title="no title">
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <h1 class="mt-5 mb-5 mr-auto ml-auto text-center pt-5 pb-5">Think you can come up with better burgers than Bob? Lets see what you've got!</h1>
+
+
+    <div class="container mt-5">
+    
+        <div class="row mb-5 mt-5">
+    
+          <div class="col-sm-7 mr-4">
+    
+            <h2>Completed Orders:</h2>
+              <ul>
+
+              </ul>
+    
+            </div>
+    
+            <div class="col-sm-4">
+    
+    
+                <h2>Previous Orders:</h2>
+    
+    
+                <ul>
+
+                </ul>
+    
+              </div>
+    
+    
+      </div>
+    
+      <div class="row">
+    
+          <div class="col-sm-6">
+    
+              <img src="https://vignette.wikia.nocookie.net/bobs-burgers-fanon/images/5/51/Bob_with_a_burger.png/revision/latest?cb=20170920181424" class="w-100 h-auto">
+    
+          </div>
+    
+        <div class="col-sm-6 mr-auto ml-auto">
+    
+          <div class="row">
+    
+          <div class="col-sm-12">
+            <h2 class="mt-5 pt-5">Add a Burger:</h2>
+              <form class="create-form">
+    
+            <div class="form-group">
+              <label for="ca">Burger Name:</label>
+              <input type="text" id="burgername" name="name">
+            </div>
+    
+            <button type="submit" id="add-burger" class="mb-5">Add Burger</button>
+          </form>
+    
+          </div>
+          
+          </div>
+    
+          <div class="row">
+    
+            <img src="https://melbournechapter.net/images/grilled-clipart-outdoor-grill-3.png" class="mt-5">
+    
+          </div>
+    
+    
+        </div>
+    
+      </div>
+    
+    </div>
+    
+    
+    <script>
+    
+    $(function() {
+      $(".devour-it").on("click", function(event) {
+        var id = $(this).data("id");
+        var eaten = $(this).data("isEaten");
+    
+        var devoured = {
+          isEaten: eaten
+        };
+    
+        // Send the PUT request.
+        $.ajax("/devour/" + id, {
+          type: "PUT",
+          data: devoured
+        }).then(
+          function() {
+            console.log("Successfully devoured the Burger");
+            // Reload the page to get the updated list
+            location.reload();
+          }
+        );
+      });
+    
+        $("#add-burger").on("click", function(event) {
+          event.preventDefault();
+          var name = $("#burgername").val().trim();
+          console.log(name)
+          var newBurger = {
+            isEaten: false,
+            name: name
+          };
+    
+          console.log(newBurger);
+    
+            $.ajax("/api/addBurger/", {
+                type: "POST",
+                data: newBurger
+            }).then(function() {
+            console.log(`Inserted the ${name}`);
+            // Reload the page to get the updated list
+            location.reload();
+          }
+        );
+    
+        });
+    
+        
+    });
+    
+    </script>
+    
+    
+
+</body>
+
+</html>
