@@ -21,7 +21,7 @@
           <div class="col-sm-7 mr-4">
     
             <h2>Completed Orders:</h2>
-              <ul>
+              <ul id="completedBurgers">
 
               </ul>
     
@@ -33,7 +33,7 @@
                 <h2>Previous Orders:</h2>
     
     
-                <ul>
+                <ul id="eatenBurgers">
 
                 </ul>
     
@@ -86,7 +86,10 @@
     
     <script>
     
-    $(function() {
+    $(document).ready(function() {
+
+        populateTables();
+
       $(".devour-it").on("click", function(event) {
         var id = $(this).data("id");
         var eaten = $(this).data("isEaten");
@@ -130,6 +133,28 @@
         );
     
         });
+
+        function populateTables() {
+            $.get("/api/burgers/", (burgerData => {
+                for (i=0; i<burgerData.length; i++) {
+                    console.log(burgerData)
+                    var listitem = $("<li>")
+                    listitem.data("id", burgerData[i].id);
+                    if (burgerData[i].isEaten === false) {
+                        console.log("Logging Burger " + (i))
+                        listitem.addClass("list-group-item list-group-item-primary")
+                        listitem.html(`${burgerData[i].name}  <button class="float-right devour-it" data-id="{{id}}" data-isEaten="1">Devour it!!</button>`)
+                        listitem.appendTo("#completedBurgers")
+                    } else if (burgerData[i].isEaten === true) {
+                        console.log("Logging Burger " + (i))
+                        listitem.addClass("list-group-item list-group-item-secondary")
+                        listitem.html(`${burgerData[i].name}`);
+                        listitem.appendTo("#eatenBurgers")
+
+                    } 
+                }
+            }));
+        }
     
         
     });
